@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"it.unipd.dei.se.faderic"},{"l":"it.unipd.dei.se.faderic.analyze"},{"l":"it.unipd.dei.se.faderic.index"},{"l":"it.unipd.dei.se.faderic.parse"},{"l":"it.unipd.dei.se.faderic.search"},{"l":"it.unipd.dei.se.faderic.utils"}];updateSearchResults();

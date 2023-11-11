@@ -1,0 +1,8 @@
+\section{Related Work}
+\label{sec:related}
+
+To understand the task and the collections provided by \ac{CLEF} we have used the paper by LongEval organizers \citet{galuvsvcakova2023longeval}. This has helped us to tackle the problem by figuring out how given documents and queries were collected and which were the main goals of the task. In the paper are also given some \emph{baseline} performances that we have used to benchmark our system during its development. 
+
+We decided to exploit query expansion techniques basing our knowledge of the theme on the works from \citet{carpineto2012survey} and \citet{azad2019query}. We have decided to use various techniques, such as word N-grams and synonyms, which we have then tried during the development of our system.
+
+Moreover, we choose to approach the problem by also using \emph{reranking}. To do so we have used the work from \citet{alkhalifa2022building}, which explains the problem of using a language model to address the longitudinal evaluation task. We build our reranking approach based on the work from \citet{Birch} who developed the Birch system.

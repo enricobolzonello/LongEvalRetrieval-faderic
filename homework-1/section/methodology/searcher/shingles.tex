@@ -1,0 +1,10 @@
+\subsubsection{Shingles}
+\label{subsubsec:shingles}
+
+Shingles are a sentence analysis technique of dividing the words of a sentence into sequences of $n$ consecutive words. For example, for the sentence "the dog barks," we can create the n-grams "the dog" and "dog barks." Shingles are useful because they capture \emph{local relationships} between words within a text, so this approach helps identify similar, though not identical, phrases and can \emph{improve search relevance}.
+The maximum number of words within a shingle can be set in the configuration file in \texttt{maxShingleSize}; in our case, we decided to generate shingles with a maximum of 3 words. Also, we avoided generating unigrams, i.e., shingles with exactly one word, as they do not capture any local relationships within the query.
+
+We then decided to set up a proximity search within each shingle. The proximity of terms in a shingle can be used to identify documents in which the search terms occur in a certain \emph{spatial relationship}.
+For example, if we are searching for the terms "dog" and "brown" with the proximity of 3 words, we want to find documents in which these two terms appear within a maximum distance of three words from each other. Thus, if a document contains sentences such as "I saw a brown dog in the park" or "The brown dog was running fast," these documents would be considered relevant because the terms "dog" and "brown" are close to each other. In our case, the proximity parameter is set to 5.
+
+Finally, we applied a boost to all shingles based on the size of the shingle itself.

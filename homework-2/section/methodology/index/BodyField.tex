@@ -1,0 +1,7 @@
+represents the body field of a document. This field has the following properties:
+
+\begin{itemize}
+	\item it is \emph{tokenized}, meaning that the body is broken into words, or tokens, to make the search more accurate and flexible;
+	\item \emph{frequencies} and also the \emph{positions} of the tokens are stored, in order to allow for phrase queries with proximity, as explained in Section~\ref{subsubsec:shingles};
+	\item the body content is \emph{stored}, even if this had an impact on the index size, this was needed in the search phase in order to pass documents bodies to the reranker, as explained in Section~\ref{subsubsec:reranker}.
+\end{itemize}

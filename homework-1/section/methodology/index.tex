@@ -1,0 +1,31 @@
+\subsection{Indexer}
+\label{subsec:indexer}
+
+Indexing is a crucial step where we create a searchable database, called \emph{index}, for the parsed documents. The index contains important information about the documents, 
+such as the words and phrases they contain, their frequency, and their location within the document. 
+Indexing allows us to store the documents in a \emph{structured} manner, which greatly speeds up the retrieval process by enabling users to search for documents based on keywords or phrases. To achieve this, we developed the following components:
+
+\begin{itemize}
+    \item \textbf{\texttt{DirectoryIndexer}}: \input{section/methodology/index/DirectoryIndexer}
+    \\
+    \item \textbf{\texttt{BodyField}}: \input{section/methodology/index/BodyField}
+\end{itemize}
+
+\begin{table}[b]
+    \caption{Indexing performances}
+    \label{tab:index-perf}
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+        \toprule
+        \textbf{Collection} & \textbf{Docs size} (GB) & \textbf{Stoplist} & \textbf{Stemmer} & \textbf{Body terms} & \textbf{Index size} (GB) & \textbf{Time} (s)  \\
+        \midrule
+        French & 7.99 & Default & Snowball & 7,497,875 & 6.98 & 1224\\
+        & & 50 most freq. & Light & 7,459,058 & 6.95 & 842\\
+        \midrule
+        English & 7.27 & Default & Snowball & 7,253,947 & 6.49 & 1041 \\
+        & & 50 most freq. & Krovetz & 7,451,647 & 6.43 & 848 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+In Table~\ref{tab:index-perf} are reported the index performances obtained using the analyzers described in Subsection~\ref{subsec:analyzer} and the setup described in Section~\ref{sec:setup}.

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+<!--
+                ### GENERAL PROPERTIES ###
+    -->
+    <!-- general.language (mandatory): French/English -->
+    <entry key="general.language">French</entry>
+
+    <!-- general.similarity (mandatory): BM25/LMDirichlet-->
+    <entry key="general.similarity">BM25</entry>
+
+    <!-- general.bm25.k1 (optional): float >= 0; leave empty to use default 1.2 -->
+    <entry key="general.BM25.k1"></entry>
+
+    <!-- general.bm25.b (optional): float [0.0,1.0]; leave empty to use default 0.75 -->
+    <entry key="general.BM25.b"></entry>
+
+    <!-- general.dirichlet.mu (optional): float >= 0; leave empty to use default 2000 -->
+    <entry key="general.LMDirichlet.mu"></entry>
+
+        <!-- searcher.maxShingleSize (optional): integer >= 2; leave empty to not use shingles -->
+    <entry key="searcher.maxShingleSize">3</entry>
+
+    <!--
+        searcher.fuzzyThreshold (optional): integer >=1; leave empty to not use fuzzyness
+        Usage: if a word has length greater or equal than this value, 2 will be used 
+        as fuzzy parameter, otherwise 1 will be used
+    -->
+    <entry key="searcher.fuzzyThreshold">10</entry>
+
+    <!--
+        searcher.rerankBERTModel (optional): string; leave empty to not use reranking
+        Usage: name of the BERT model to load from https://huggingface.co/models
+        Tested options: Luyu/bert-base-mdoc-bm25, enricobolzonello/clef_longeval
+    -->
+    <entry key="searcher.rerankBERTModel">Luyu/bert-base-mdoc-bm25</entry>
+
+    <!-- searcher.numDocsToRerank (optional): integer >= 2; leave empty to not use reranking -->
+    <entry key="searcher.numDocsToRerank"></entry>
+
+    <!--
+        searcher.rerankScoreWeight (optional): float (0.0, 1.0]; leave empty to not use reranking
+        Usage: the final score will be computed with the following formula
+        (1 - rerankScoreWeight) * originalScore + rerankScoreWeight * rerankScore
+    -->
+    <entry key="searcher.rerankScoreWeight">1</entry>
+
+    <!--
+                ### FRENCH PROPERTIES ###
+    -->
+    <!-- indexer.French.docsPath (mandatory): the path of the documents folder -->
+    <entry key="indexer.French.docsPath">documents/longeval-train-v2/publish/French/Documents/Trec</entry>
+
+    <!-- indexer.French.indexPath (mandatory): the path of the index folder -->
+    <entry key="indexer.French.indexPath">experiment/Index-French-BM25-Stop50-LightStem</entry>
+
+    <!-- analyzer.French.stopFile (optional): leave empty to use default Lucene stoplist for French -->
+    <entry key="analyzer.French.stopFile">stoplists/stop50_train_fr.txt</entry>
+
+    <!-- analyzer.French.stemmer (mandatory): SnowballFrench/Light -->
+    <entry key="analyzer.French.stemmer">Light</entry>
+
+    <!-- searcher.French.topicsFile (mandatory): the path of the topics file -->
+    <entry key="searcher.French.topicsFile">documents/longeval-train-v2/publish/French/Queries/train.trec</entry>
+
+    <!-- searcher.French.runID (mandatory): the run output will have this name and will be placed in the experiment folder -->
+    <entry key="searcher.French.runID">FADERIC_French-BM25-Stop50-LightStem-Shingle-Fuzzy-SynCustom</entry>
+
+    <!-- searcher.French.synonymFile (optional): leave empty to not use synonyms -->
+    <entry key="searcher.French.synonymFile">synonyms/syn_custom_fr.txt</entry>
+
+    <!-- searcher.French.spellCheckFile (optional): leave empty to not use spellcheck -->
+    <entry key="searcher.French.spellCheckFile"></entry>
+
+    <!--
+                ### ENGLISH PROPERTIES ###
+    -->
+    <!-- indexer.English.docsPath (mandatory): the path of the documents folder -->
+    <entry key="indexer.English.docsPath">documents/longeval-train-v2/publish/English/Documents/Trec</entry>
+
+    <!-- indexer.English.indexPath (mandatory): the path of the index folder -->
+    <entry key="indexer.English.indexPath">experiment/Index-English-BM25-Stop50-KStem</entry>
+
+    <!-- searcher.English.topicsFile (mandatory): the path of the topics file -->
+    <entry key="searcher.English.topicsFile">documents/longeval-train-v2/publish/English/Queries/train.trec</entry>
+
+    <!-- searcher.English.runID (mandatory): the run output will have this name and will be placed in the experiment folder -->
+    <entry key="searcher.English.runID">FADERIC_English-BM25-Stop50-KStem-Shingle-Fuzzy-SynPOS</entry>
+
+    <!-- analyzer.English.stopFile (optional): leave empty to use default Lucene stoplist for English -->
+    <entry key="analyzer.English.stopFile">stoplists/stop50_train_en.txt</entry>
+
+    <!-- analyzer.English.stemmer (mandatory): SnowballEnglish/Krovetz -->
+    <entry key="analyzer.English.stemmer">Krovetz</entry>
+
+    <!-- searcher.English.synonymFile (optional): leave empty to not use synonyms from a file -->
+    <entry key="searcher.English.synonymFile"></entry>
+
+    <!--
+        searcher.English.usePOSSynonyms (optional): true/false; leave empty to not use POS synonyms;
+        Usage: if set to true, the synonymFile option will be ignored, the synonyms will be taken from WordNet
+        and the right sense of the word will be chosen according to its Part-of-Speech tag found with OpenNLP
+    -->
+    <entry key="searcher.English.usePOSSynonyms">true</entry>
+
+    <!-- searcher.English.spellCheckFile (optional): leave empty to not use spellcheck -->
+    <entry key="searcher.English.spellCheckFile"></entry>
+
+</properties>

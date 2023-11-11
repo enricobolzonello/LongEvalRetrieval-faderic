@@ -1,0 +1,12 @@
+\section{Conclusions and Future Work}
+\label{sec:conclusion}
+
+From the obtained results, we can say that the system has kept \emph{satisfactory performance} from the longitudinal evaluation point of view. In fact, on the short term, there has been no significant worsening, while on the long term, there has been just a moderate performance drop.
+
+During the developing of the system we understood that \emph{query expansion} and \emph{reranking} play a major role in the \ac{IR} systems. Those two features granted us the biggest performance improvements. Although the system has reached decent scores, our work could be  \emph{further developed} in different ways.
+
+With respect to query expansion, we could improve the synonyms feature by using other dictionaries, since WordNet is quite outdated and a big portion of the queries were regarding very recent topics, and also by using better French dictionaries, since there are only a few available when working with languages other than English and we had to customize our own.
+Another query expansion option could be switching from simple dictionaries to \emph{neural models}, in order to expand a query with words related not just to the meaning of the single words but also to the \emph{context} of the whole topic the user is looking for.
+
+Regarding the reranker, there are some things we could improve, mainly focusing on the  \emph{trained model}. As discussed in Section~\ref{subsubsec:reranker}, we did not have the required hardware to properly train a machine learning model, so we trained on Colab with a time limit of 8 hours. This forced us to train with only 1 epoch and we tested only one set of hyperparameters, so, assuming having the necessary hardware, future improvements could focus on training a better model, with more epochs and testing different hyperparameters.
+More affordable improvements could be done by dropping the libraries for training and inference and working directly with Torch for the interaction with the model, so we could be able to use the latest Torch version, which includes a new implementation of the Transformer API which speeds up training significantly.

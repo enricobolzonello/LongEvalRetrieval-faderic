@@ -1,0 +1,11 @@
+\subsubsection{Fuzzy}
+\label{subsubsec:fuzzy}
+
+
+A \emph{fuzzy} search, or approximate search, is a technique used to search for approximate or \emph{partial} matches between a search term and documents in a collection of texts. Unlike exact search, in which the match must be exact and precise, fuzzy search allows you to find results even when the words you search for do not exactly match those in the documents.
+Fuzzy search is particularly useful when you want to get results even if there are \emph{misspellings}, \emph{language variants}, \emph{abbreviations} or other forms of variations in the search terms or texts of the documents. For example, if you search for the term "roam" with a fuzzy search, the document containing the term "foam" might also be returned.
+
+Fuzzy search techniques are based on the use of algorithms that evaluate the similarity between text strings. One of the most common algorithms used for fuzzy search is the Levenshtein algorithm \citep{levenshtein1966binary}, which calculates the edit distance between two strings, that is, the minimum number of operations (character insertions, deletions and substitutions) required to transform one string into the other. Lucene, for example, uses a variant of the algorithm just described, the Damerau-Levenshtein algorithm, named after the Damerau algorithm \citep{damerau1964technique}, which also considers character traspositions among its allowable operations.
+
+Lucene also allows you to add an additional (optional) parameter with which to specify the maximum number of changes allowed. In our case we decided to set a manual \emph{threshold} to choose the value of the parameter; if the word length is greater than or equal to the threshold then the fuzzy parameter is set to 2 otherwise 1 is used. The threshold is called "fuzzyThreshold" and can be set in the configuration file; we decided to set it to 10.
+Finally, to avoid performance degradation, in our IR system, fuzzy search is applied only if the query contains a single term.

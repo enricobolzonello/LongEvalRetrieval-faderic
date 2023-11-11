@@ -1,0 +1,18 @@
+\subsection{Parser}
+\label{subsec:parser}
+
+%%brief parser description
+We manually inspected the documents provided by \ac{CLEF} in order to understand their \emph{structure} and be able to extract the body and ID of each document from them.
+
+In order to do that, we created a tool called \emph{parser} that has been essential for extracting information from documents in the specified format 
+used by \ac{TREC}. The parser helps us create structured objects that are used for analysis and indexing within the \ac{IR} system.
+
+Here are the key components we implemented:
+\begin{itemize}
+    \item  \textbf{\texttt{ParsedDocument}}: \input{section/methodology/parser/ParsedDocument}
+    \item  \textbf{\texttt{DocumentParser}}: \input{section/methodology/parser/DocumentParser}
+    \item  \textbf{\texttt{LongEvalDocumentParser}}: \input{section/methodology/parser/LongEvalDocumentParser}
+\end{itemize}   
+
+We used  the \texttt{LongEvalDocumentParser} and the \texttt{ParsedDocument} in the indexer to represent the content of the documents that are 
+in the directory specified by \texttt{docsDir}. The first one has been used to iterate over the content of the specified document, while the second one has been used to represent a document to be indexed.

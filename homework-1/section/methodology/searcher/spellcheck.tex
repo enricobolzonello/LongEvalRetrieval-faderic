@@ -1,0 +1,9 @@
+\subsubsection{SpellChecker}
+\label{subsubsec:spellchecker}
+
+In the searcher, we tried to implement a spell checker for the query tokens.
+For every query token, using the \texttt{SpellChecker} class of Lucene \citep{Lucene}, the spell checker analyzes the token and, based on a dictionary of words stored in the resources folder, suggests one similar (not by meaning but by \emph{spelling}) word.
+This new word is appended at the end of the query, after the original token, and is given a weight of 0,2 to the new word. This is done because if we match the original token, it's more relevant than matching the new modified token.
+We do this only for those queries that are composed of only one word (token), because, otherwise, the performance dropped.
+In fact, for these queries, suggesting one similar but different word can make a difference in case the one word inserted in the query is \emph{misspelled}.
+In the case of queries composed of more than one token, it's difficult that all the words are misspelled, so by changing all the words, the performances obviously drop.

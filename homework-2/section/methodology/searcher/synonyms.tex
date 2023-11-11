@@ -1,0 +1,73 @@
+\subsubsection{Synonyms}
+\label{subsubsec:synonyms}
+
+Managing synonyms in a retrieval system is not straightforward. The use of synonyms may not necessarily improve results, and this depends on how they are used.
+
+Synonyms may be useful in the context of \ac{IR} to broaden the search to include more related terms. However, the introduction of synonyms can also create problems such as noise in the information retrieval process. Here are some reasons why the use of synonyms may not improve results:
+\begin{itemize}
+	\item \textbf{Polysemy}: words may have \emph{more than one meaning}. Introducing synonyms might lead to an increase in irrelevant results if a synonym is associated with another meaning of the searched word. For example, if one searches for "bank" in the context of a financial bank, introducing the synonym "riverbank" could generate irrelevant results.
+	\item \textbf{Irrelevant synonyms}: not all synonyms are equally \emph{relevant in the context} of a given query. Some synonyms might be too general or too specific concerning the user's intent, leading to inappropriate or insufficient results.
+	\item \textbf{Redundancy}: adding synonyms can lead to redundancy in the answers provided. If multiple synonymous words or phrases are used in the query, there may be significant overlap between the results, reducing the overall effectiveness of the IR system.
+\end{itemize}
+
+However, it should be kept in mind that the effectiveness of using synonyms in improving the results of the IR system also depends on the specific implementation and the characteristics of the domain or context in which the system is used. In some cases, the use or \emph{expansion} of synonyms could actually improve the accuracy of information retrieval. 
+
+Furthermore, the use of synonyms can increase computational complexity in the information retrieval process. Because synonyms require accurate correspondence with indexed documents, additional computations must be performed to identify and compare matching synonyms in indexed texts.
+
+We made several attempts to implement synonyms in our system; a summary description of what we did is given below.
+
+Firstly, since handling synonyms in the index takes too much computation time, we decided to handle them directly in the search. We added synonyms in the queries with a query expansion approach.
+
+In addition, we decided to use the WordNet\footnote{https://wordnet.princeton.edu/} dictionary. WordNet is a lexical database that groups English words into sets of synonyms called synsets, providing semantic relationships and definitions. It offers a comprehensive resource for natural language processing tasks, such as word sense disambiguation, information retrieval, and sentiment analysis.
+Since WordNet is written in C, it was necessary to use an additional API in order to use the dictionary on our system. That API is called extJWNL\footnote{https://github.com/extjwnl/extjwnl} (Extended Java WordNet Library) and does not need the WordNet database installed locally.
+
+Also, to improve dictionary lookup, we decided to use the OpenNLP\footnote{https://opennlp.apache.org/} library for natural language processing and limit polysemy. Each word in the original query was processed by an OpenNLP \ac{PoS} Tagger in order to obtain the tag associated with the word. That function analyzes the context in which the word is used and returns the associated tag. The model used for the pos tagger was \texttt{en-pos-maxent.bin} and the tags are associated with WordNet section as shown in Table~\ref{tab:opennlp-tags}.\\
+Knowing the tag of each word in a query made it possible to look up the word in the corresponding dictionary section. For example, for the query "free software," free was searched in the adjective section and software in the noun section.
+This strategy improved the metrics very little probably because the queries provided by Long Eval are very short, averaging 2/3 words. In addition, OpenNLP works well with \emph{properly formulated sentences}, including consideration of capitalization and punctuation. In this case, queries are very crudely formulated, for example, some begin with a capital letter and some do not, as a result, OpenNLP does not always provide the correct tag. Then, this strategy might be more useful in the case of more complex queries, such as those characterizing a conversational \ac{IR} system.
+
+\begin{table}[tbp]
+    \caption{OpenNLP Tags compared with WordNet Sections}
+    \label{tab:opennlp-tags}
+    \centering
+    \begin{tabular}{|c|c|}
+        \toprule
+        \textbf{OpenNLP Tag} & \textbf{WordNet Section}\\
+        \midrule
+        JJ & Adjectives\\
+        
+        VB & Verbs\\
+        
+        RB & Adverbs\\
+        
+        NN & Nouns\\
+        
+        Others & No synonyms retrieved\\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Subsequently, we tried to give a \emph{different boost} to each synonym. As a first approach, we decided to provide a boost based on the amount of synonyms returned. In this case, the boost was calculated in this way: 
+\begin{equation}
+boost=\frac{Boost Base}{Synonym List Length}
+\end{equation}
+This approach was used to limit the importance associated with each synonym if the returned synonym list is long, being more likely to get \emph{irrelevant synonyms}.
+
+Finally, we moved synonym management, creating two new Analyzers: \texttt{SynonymAnalyzer} and \texttt{SynonymPOSAnalyzer}, which are applied only in the search part:
+\begin{itemize}
+	\item \textbf{\texttt{SynonymAnalyzer}}: uses as input a query already previously analyzed with the standard Analyzer, i.e. \texttt{EnglishLongEvalAnalyzer} or \texttt{FrenchLongEvalAnalyzer}, after applies: \texttt{SynonymGraphFilter}, \texttt{FlattenGraphFilter} and \texttt{StopFilter}.\\ 
+\texttt{SynonymGraphFilter} represents a filter that can be directly applied to a \texttt{TokenStream} within an Analyzer. The filter creates a synonym graph based on specified configurations and expands the terms found in the analyzed text by adding the corresponding synonyms to the token graph. \texttt{FlattenGraphFilter} converts an incoming graph token stream, such as one from \texttt{SynonymGraphFilter}, into a flat form so that all nodes form a single linear chain with no side paths. Every path through the graph touches every node. This is necessary when indexing a graph token stream because the index does not save \texttt{PositionLengthAttribute} and so it cannot preserve the graph structure. However, at search time, query parsers can correctly handle the graph and this token filter should not be used.
+
+This Analyzer uses a list of synonyms in .txt format, available in two versions: standard and custom. Before being processed by the Analyzer, the synonym list is transformed into a \texttt{SynonymMap} object via the \texttt{AnalyzerUtil}'s \texttt{loadSynonymList} function.
+
+	\item \textbf{\texttt{SynonymPOSAnalyzer}}: takes as input \texttt{EnglishLongEvalAnalyzer}, then applies an \texttt{OpenNLPPOSFilter}, so that each word is assigned the associated tag.
+Then, it applies a custom filter called \texttt{SynonymPOSFilter} to manage the tags and look up words in the WordNet dictionary. Creating a custom filter was not trivial as the information about it in the documentation and online is very limited. 
+The filter allows us to:
+	\begin{enumerate}
+		\item fetch the input tokens, 
+		\item retrieve their associated tag, 
+		\item search the synonyms in the dictionary based on their tag,
+		\item process the synonyms with the standard analyzer i.e. \texttt{EnglishLongEvalAnalyzer}
+		\item and return as output a TokenStream containing all the synonyms found. 
+	\end{enumerate}
+\end{itemize}
+The tokenStream returned as output by both Analyzers is then transformed into a list of strings which is in turn processed by the \texttt{Searcher} to apply a boost. Finally, the synonyms are added to the \texttt{BooleanQuery} along with the original query.

@@ -1,0 +1,235 @@
+<?xml version="1.0"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>it.unipd.dei.se.faderic</groupId>
+
+	<artifactId>longeval-retrieval</artifactId>
+
+	<version>1.00</version>
+
+	<packaging>jar</packaging>
+
+	<!-- Project description elements -->
+	<name>LongEval-Retrieval</name>
+
+	<description>
+	Code of group FADERIC for the "Search Engines" course, A.Y. 2022/2023.
+    The group is participating in the LongEval Lab at CLEF 2023, Task 1 - LongEval-Retrieval.
+    "Search Engines" is a course for the master's degree in "Computer Engineering" and master's degree in "Data Science" at the University of Padua, Italy.
+	</description>
+
+	<url>https://bitbucket.org/upd-dei-stud-prj/seupd2223-faderic/</url>
+
+	<inceptionYear>2023</inceptionYear>
+
+	<developers>
+		<developer>
+			<id>cm</id>
+			<name>Christian Marchiori</name>
+			<email>christian.marchiori@studenti.unipd.it</email>
+			<organization>University of Padua, Italy</organization>
+		</developer>
+		<developer>
+			<id>dm</id>
+			<name>Daniele Moschetta</name>
+			<email>daniele.moschetta@studenti.unipd.it</email>
+			<organization>University of Padua, Italy</organization>
+		</developer>
+		<developer>
+			<id>eb</id>
+			<name>Enrico Bolzonello</name>
+			<email>enrico.bolzonello@studenti.unipd.it</email>
+			<organization>University of Padua, Italy</organization>
+		</developer>
+		<developer>
+			<id>fz</id>
+			<name>Fabio Zanini</name>
+			<email>fabio.zanini@studenti.unipd.it</email>
+			<organization>University of Padua, Italy</organization>
+		</developer>
+		<developer>
+			<id>rt</id>
+			<name>Riccardo Trevisiol</name>
+			<email>riccardo.trevisiol.1@studenti.unipd.it</email>
+			<organization>University of Padua, Italy</organization>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<organization>
+		<name>University of Padua, Italy</name>
+		<url>http://www.unipd.it/en/</url>
+	</organization>
+
+	<!-- Build settings -->
+	
+	<!-- Specifies the encoding to be used for project source files 
+		and other properties
+	-->
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<lucene.version>9.5.0</lucene.version>
+		<java.version>17</java.version>
+	</properties>
+	
+	<!-- Configuration of the default build lifecycle -->
+	<build>
+		<defaultGoal>compile</defaultGoal>
+		
+		<!-- source code folder -->
+		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+		
+		<!-- compiled code folder -->
+		<directory>${basedir}/target</directory>
+		
+		<!-- name of the generated package -->
+		<finalName>${project.artifactId}-${project.version}</finalName>
+
+		<!-- configuration of the plugins for the different goals -->
+		<plugins>
+		
+			<!-- compiler plugin: set the source and target code -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.11.0</version>
+				<configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+			
+			<!-- javadoc plugin: output in the javadoc folder -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.5.0</version>
+				<configuration>
+					<reportOutputDirectory>${basedir}/javadoc</reportOutputDirectory>
+					<author>true</author>
+					<nosince>false</nosince>
+					<show>protected</show>
+					<source>${java.version}</source>
+					<doctitle>${project.name} ${project.version} - LongEval-Retrieval</doctitle>
+					<windowtitle>${project.artifactId} ${project.version}</windowtitle>
+					<detectJavaApiLink>true</detectJavaApiLink>
+					<detectLinks>true</detectLinks>
+					<validateLinks>true</validateLinks>
+				</configuration>
+			</plugin>
+
+			<!-- generates jar files including any dependencies -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.5.0</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id> <!-- this is used for inheritance merges -->
+						<phase>package</phase> <!-- bind to the packaging phase -->
+						<goals>
+							<goal>single</goal> <!-- the only goal of the assembly plugin -->
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+		</plugins>
+	</build>
+
+	<!-- Dependencies -->
+	<dependencies>
+		<dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>${lucene.version}</version>
+        </dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analysis-common</artifactId>
+			<version>${lucene.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-suggest</artifactId>
+			<version>${lucene.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-queryparser</artifactId>
+			<version>${lucene.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-benchmark</artifactId>
+			<version>${lucene.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analysis-opennlp</artifactId>
+			<version>${lucene.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.lucene</groupId>
+			<artifactId>lucene-analyzers-icu</artifactId>
+			<version>8.11.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.12.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sf.extjwnl</groupId>
+			<artifactId>extjwnl</artifactId>
+			<version>2.0.5</version>
+		</dependency>
+
+		<dependency>
+    		<groupId>net.sf.extjwnl</groupId>
+    		<artifactId>extjwnl-data-wn31</artifactId>
+    		<version>1.2</version>
+		</dependency>
+
+		<dependency>
+    		<groupId>org.slf4j</groupId>
+    		<artifactId>slf4j-api</artifactId>
+    		<version>2.0.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>2.0.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>black.ninia</groupId>
+			<artifactId>jep</artifactId>
+			<version>4.1.1</version>
+		</dependency>
+				
+	</dependencies>
+</project>
