@@ -1,0 +1,8 @@
+# Ignore all files by default
+* linguist-vendored
+
+# Include files in the code directory
+code/* linguist-vendored=false
+
+# Ignore javadoc
+code/javadoc/** linguist-vendored
